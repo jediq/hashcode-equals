@@ -5,6 +5,30 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
+ * 
+ * Java 8 implementation of hashCode() and equals() builder pattern.
+ * 
+ * <br/><br/>
+ * Usage : 
+ * <pre>
+ * {@code
+ * private LambdaEqualsHashCode <Thing> lehc = new LambdaEqualsHashCode <>(Thing.class)
+ *      .with(t -> t.int1)
+ *      .with(t -> t.int2)
+ *      .with(t -> t.string1)
+ *      .with(t -> t.string2);
+ *
+ * @Override
+ * public int hashCode() {
+ *   return lehc.hashCodeFor(this);
+ * }
+ *
+ * @Override
+ * public boolean equals(Object o) {
+ *   return lehc.areEqual(this, o);
+ * }
+ * }
+ * </pre>
  *
  */
 public class LambdaEqualsHashCode<T> {
@@ -15,15 +39,35 @@ public class LambdaEqualsHashCode<T> {
 
     private List<Function<T, Object> > attributes = new ArrayList<>();
 
+    /**
+     * Constructs the object with a single class type which will be used to validate
+     * the builder functions passed in and the hashCodeFor and areEqual methods.
+     * 
+     * @param clazz the class type to use
+     */
     public LambdaEqualsHashCode(Class<T> clazz) {
         this.clazz = clazz;
     }
 
+    /**
+     * Adds a builder function for use in the hashCodeFor and areEqual methods
+     *
+     * @param attribute the builder function
+     *                 
+     * @return this object to allow method chaining
+     */
     public LambdaEqualsHashCode<T> with(Function<T, Object> attribute) {
         attributes.add(attribute);
         return this;
     }
 
+    /**
+     * Generates a hashcode for the passed in T object using the builder functions defined previously.
+     *
+     * @param object the object to generate the hashcode from
+     *               *               
+     * @return the hashCode
+     */
     public int hashCodeFor(T object) {
         int total = SEED;
         for (Function<T, Object>  attribute : attributes) {
@@ -36,6 +80,15 @@ public class LambdaEqualsHashCode<T> {
         return total;
     }
 
+    /**
+     * Compares two objects, the first of the genericised type defined in the constructor
+     * using the builder functions defined previously.
+     *  
+     * @param left The genericised lhs object to compare
+     * @param right The plain rhs object to compare
+     *           
+     * @return true if the objects are calculated to be equal else false
+     */
     public boolean areEqual(T left, Object right) {
         if (left == right) {
             return true;
