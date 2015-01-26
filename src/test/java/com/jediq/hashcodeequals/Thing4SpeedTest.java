@@ -12,7 +12,7 @@ public class Thing4SpeedTest extends SpeedTest {
 
     public class Thing4 extends Thing {
 
-        private LambdaEqualsHashCode <Thing4> lehc = new LambdaEqualsHashCode <>(Thing4.class)
+        private LambdaHashCodeEquals<Thing4> lehc = new LambdaHashCodeEquals<>(Thing4.class)
                 .with(t -> t.int1)
                 .with(t -> t.int2)
                 .with(t -> t.string1)

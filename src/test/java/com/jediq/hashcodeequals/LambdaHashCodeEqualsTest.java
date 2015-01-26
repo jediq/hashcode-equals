@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 /**
  *
  */
-public class LambdaEqualsHashCodeTest {
+public class LambdaHashCodeEqualsTest {
 
 
     @Test
@@ -54,26 +54,26 @@ public class LambdaEqualsHashCodeTest {
     @Test
     public void testHashCodeNulls() {
         T1 object = new T1(null, null);
-        assertEquals(31, object.hashCode());
+        assertEquals(29791, object.hashCode());
 
         object = new T1(null, 2);
-        assertEquals(1953, object.hashCode());
+        assertEquals(29793, object.hashCode());
 
         object = new T1("s", null);
-        assertEquals(110546, object.hashCode());
+        assertEquals(33356, object.hashCode());
 
         object = new T1("s", 3);
-        assertEquals(10391324, object.hashCode());
+        assertEquals(33359, object.hashCode());
     }
 
     @Test
     public void testAreEqual_WrongLeftObject() {
-        LambdaEqualsHashCode slehc = new LambdaEqualsHashCode(this.getClass());
+        LambdaHashCodeEquals slehc = new LambdaHashCodeEquals(this.getClass());
         assertFalse(slehc.areEqual("", this));
     }
     @Test
     public void testAreEqual_WrongRightObject() {
-        LambdaEqualsHashCode slehc = new LambdaEqualsHashCode(this.getClass());
+        LambdaHashCodeEquals slehc = new LambdaHashCodeEquals(this.getClass());
         assertFalse(slehc.areEqual(this, ""));
     }
 
@@ -102,7 +102,7 @@ public class LambdaEqualsHashCodeTest {
         String s;
         Integer i;
 
-        private final LambdaEqualsHashCode<T1> SLEQHC = new LambdaEqualsHashCode<>(T1.class)
+        private final LambdaHashCodeEquals<T1> LHCE = new LambdaHashCodeEquals<>(T1.class)
                 .with(a -> a.s)
                 .with(a -> a.i);
 
@@ -113,12 +113,12 @@ public class LambdaEqualsHashCodeTest {
 
         @Override
         public boolean equals(Object that) {
-            return SLEQHC.areEqual(this, that);
+            return LHCE.areEqual(this, that);
         }
 
         @Override
         public int hashCode() {
-            return SLEQHC.hashCodeFor(this);
+            return LHCE.hashCodeFor(this);
         }
     }
 }

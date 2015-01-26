@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
- * 
+ *
  * Java 8 implementation of hashCode() and equals() builder pattern.
  * 
  * <br/><br/>
@@ -31,7 +31,7 @@ import java.util.function.Function;
  * </pre>
  *
  */
-public class LambdaEqualsHashCode<T> {
+public class LambdaHashCodeEquals<T> {
 
     private static final int SEED = 31;
 
@@ -45,7 +45,7 @@ public class LambdaEqualsHashCode<T> {
      * 
      * @param clazz the class type to use
      */
-    public LambdaEqualsHashCode(Class<T> clazz) {
+    public LambdaHashCodeEquals(Class<T> clazz) {
         this.clazz = clazz;
     }
 
@@ -56,7 +56,7 @@ public class LambdaEqualsHashCode<T> {
      *                 
      * @return this object to allow method chaining
      */
-    public LambdaEqualsHashCode<T> with(Function<T, Object> attribute) {
+    public LambdaHashCodeEquals<T> with(Function<T, Object> attribute) {
         attributes.add(attribute);
         return this;
     }
