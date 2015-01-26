@@ -2,6 +2,7 @@ package com.jediq.hashcodeequals;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  *
@@ -12,13 +13,13 @@ public class LambdaEqualsHashCode<T> {
 
     private Class<T> clazz;
 
-    private List<Attribute<T>> attributes = new ArrayList<>();
+    private List<Function<T, Object> > attributes = new ArrayList<>();
 
     public LambdaEqualsHashCode(Class<T> clazz) {
         this.clazz = clazz;
     }
 
-    public LambdaEqualsHashCode<T> with(Attribute<T> attribute) {
+    public LambdaEqualsHashCode<T> with(Function<T, Object> attribute) {
         attributes.add(attribute);
         return this;
     }
@@ -30,7 +31,7 @@ public class LambdaEqualsHashCode<T> {
         if (!clazz.isInstance(left) || !clazz.isInstance(right)) {
             return false;
         }
-        for (Attribute attribute : attributes) {
+        for (Function<T, Object>  attribute : attributes) {
             if (areAttributesDifferent(left, right, attribute)) {
                 return false;
             }
@@ -38,30 +39,21 @@ public class LambdaEqualsHashCode<T> {
         return true;
     }
 
-    private boolean areAttributesDifferent(T left, Object right, Attribute attribute) {
-        Object leftAttribute = attribute.value(left);
-        Object rightAttribute = attribute.value(right);
-        if (leftAttribute == null && rightAttribute != null) {
-            return true;
-        }
-        if (leftAttribute != null && !leftAttribute.equals(rightAttribute)) {
-            return true;
-        }
-        return false;
+    private boolean areAttributesDifferent(T left, Object right, Function attribute) {
+        Object leftAttribute = attribute.apply(left);
+        Object rightAttribute = attribute.apply(right);
+        return leftAttribute == null && rightAttribute != null 
+                || leftAttribute != null && !leftAttribute.equals(rightAttribute);
     }
 
     public int hashCodeFor(T object) {
         int value = SEED;
-        for (Attribute attribute : attributes) {
-            Object attributeValue = attribute.value(object);
+        for (Function<T, Object>  attribute : attributes) {
+            Object attributeValue = attribute.apply(object);
             if (attributeValue != null) {
                 value += attributeValue.hashCode() * SEED * value;
             }
         }
         return value;
-    }
-
-    public interface Attribute<U> {
-        Object value(U t);
     }
 }
