@@ -24,6 +24,18 @@ public class LambdaEqualsHashCode<T> {
         return this;
     }
 
+    public int hashCodeFor(T object) {
+        int total = SEED;
+        for (Function<T, Object>  attribute : attributes) {
+            Object attributeValue = attribute.apply(object);
+            total *= SEED;
+            if (attributeValue != null) {
+                total += attributeValue.hashCode();
+            }
+        }
+        return total;
+    }
+
     public boolean areEqual(T left, Object right) {
         if (left == right) {
             return true;
@@ -44,16 +56,5 @@ public class LambdaEqualsHashCode<T> {
         Object rightAttribute = attribute.apply(right);
         return leftAttribute == null && rightAttribute != null 
                 || leftAttribute != null && !leftAttribute.equals(rightAttribute);
-    }
-
-    public int hashCodeFor(T object) {
-        int value = SEED;
-        for (Function<T, Object>  attribute : attributes) {
-            Object attributeValue = attribute.apply(object);
-            if (attributeValue != null) {
-                value += attributeValue.hashCode() * SEED * value;
-            }
-        }
-        return value;
     }
 }
