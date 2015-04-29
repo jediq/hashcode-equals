@@ -1,5 +1,7 @@
 # hashcode-equals
 
+[![Build Status](https://travis-ci.org/jediq/hashcode-equals.svg?branch=master)](https://travis-ci.org/jediq/hashcode-equals)
+
 Java 8 implementation of hashCode() and equals() builder pattern.
 
 ## Usage : 
