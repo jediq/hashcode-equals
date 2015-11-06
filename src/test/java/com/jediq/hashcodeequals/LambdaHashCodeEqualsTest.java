@@ -51,6 +51,7 @@ public class LambdaHashCodeEqualsTest {
         assertFalse(left.equals(right));
     }
 
+
     @Test
     public void testHashCodeNulls() {
         T1 object = new T1(null, null);

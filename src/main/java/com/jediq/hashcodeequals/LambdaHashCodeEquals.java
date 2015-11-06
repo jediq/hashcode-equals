@@ -1,6 +1,7 @@
 package com.jediq.hashcodeequals;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 
@@ -37,6 +38,8 @@ public class LambdaHashCodeEquals<T> {
 
     private Class<T> clazz;
 
+    private List<Comparator<T>> comparators = new ArrayList<>();
+
     private List<Function<T, Object> > attributes = new ArrayList<>();
 
     /**
@@ -58,6 +61,12 @@ public class LambdaHashCodeEquals<T> {
      */
     public LambdaHashCodeEquals<T> with(Function<T, Object> attribute) {
         attributes.add(attribute);
+        return this;
+    }
+
+
+    public LambdaHashCodeEquals<T> withComparator(Comparator<T> comparator) {
+        comparators.add(comparator);
         return this;
     }
 
@@ -98,6 +107,11 @@ public class LambdaHashCodeEquals<T> {
         }
         for (Function<T, Object>  attribute : attributes) {
             if (areAttributesDifferent(left, right, attribute)) {
+                return false;
+            }
+        }
+        for (Comparator comparator : comparators) {
+            if (comparator.compare(left, right) != 0) {
                 return false;
             }
         }
